@@ -11,30 +11,30 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.models.AddressModel;
-import com.example.demo.services.AddressService;
+import com.example.demo.models.UserAddressModel;
+import com.example.demo.services.UserAddressService;
 
 @RestController
 @RequestMapping("/api/addresses")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class AddressController {
+public class UserAddressController {
     
     @Autowired
-    AddressService addressService;
+    UserAddressService userAddressService;
 
     @GetMapping
-    public List<AddressModel> getAllAddresses(){
-        return addressService.getAllAddresses();
+    public List<UserAddressModel> getAllAddresses(){
+        return userAddressService.getAllAddresses();
     }
 
     @GetMapping("/{id}")
-    public AddressModel getAddressById(@PathVariable Long id){
-        return addressService.getById(id);
+    public UserAddressModel getAddressById(@PathVariable Long id){
+        return userAddressService.getById(id);
     }
 
     @GetMapping("/zipCode/{zipCode}")
-    public Optional<AddressModel> getByZipCode(@PathVariable String zipCode){
-        return addressService.getByZipCode(zipCode);
+    public Optional<UserAddressModel> getByZipCode(@PathVariable String zipCode){
+        return userAddressService.getByZipCode(zipCode);
     }
 
 }

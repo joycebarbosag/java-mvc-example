@@ -37,6 +37,6 @@ public class UserModel {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="address_id", referencedColumnName = "addressId")
     @JsonManagedReference
-    private AddressModel address;
+    private UserAddressModel address;
 
 }
