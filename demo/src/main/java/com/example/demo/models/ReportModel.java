@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +27,10 @@ public class ReportModel {
     private String description;
     private boolean isFire;
     private boolean status;
-    private String image;
+    @Lob
+    private byte[] img;
+    @Lob
+    private String base64Image;
     private Long userId;
 
     public ReportModel(){

@@ -1,8 +1,9 @@
 package com.example.demo.controllers;
 
+import java.io.IOException;
 import java.util.List;
-
 import java.util.Optional;
+import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.multipart.MultipartFile;
+import com.example.demo.models.ReportAddressModel;
 import com.example.demo.models.ReportModel;
 import com.example.demo.services.ReportService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/api/reports")
@@ -44,10 +48,21 @@ public class ReportController {
         }
     }
 
-    @PostMapping("/createReport")
-    public ResponseEntity<ReportModel> createReport(@RequestBody ReportModel report) {
-        ReportModel createdReport = reportService.createReport(report);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdReport);
+    @PostMapping(value = "/createReport", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<ReportModel> createReport(
+            @RequestParam("description") String description,
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            @RequestParam("userId") Long userId,
+            @RequestParam("address") String addressJson) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            ReportAddressModel address = mapper.readValue(addressJson, ReportAddressModel.class);
+            
+            ReportModel createdReport = reportService.createReport(description, image, address, userId);
+            return ResponseEntity.ok(createdReport);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PatchMapping("/updateReport/{id}")
@@ -56,7 +71,7 @@ public class ReportController {
             @RequestBody ReportModel reportUpdate) {
         return reportService.updatePartialReport(id, reportUpdate);
     }
-
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteReport(@PathVariable Long id) {
         return reportService.deleteReport(id);

@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.models.FirefighterModel;
 import com.example.demo.services.FirefighterService;
 import com.example.demo.services.UserService;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -56,6 +56,13 @@ public class FirefighterController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @PutMapping("/updateFirefighter/{id}")
+    public ResponseEntity<FirefighterModel> updateFirefighter(
+            @PathVariable Long id,
+            @RequestBody FirefighterModel updatedFirefighter) {
+        return firefighterService.updateFirefighter(id, updatedFirefighter);
     }
 
 }
