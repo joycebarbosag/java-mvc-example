@@ -1,18 +1,15 @@
 package com.example.demo.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import jakarta.annotation.Generated;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -30,9 +27,16 @@ public class ReportModel {
     private boolean isFire;
     private boolean status;
     private String image;
+    private Long userId;
 
     public ReportModel(){
         this.isFire = false;
         this.status = true;
     }
-}
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "addressId")
+    @JsonManagedReference
+    private ReportAddressModel address;
+
+}   

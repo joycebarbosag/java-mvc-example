@@ -10,14 +10,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.persistence.CascadeType;
+
 
 @Entity
-// @Table(name="user_address", schema="chama")
+// @Table(name="report_address", schema="chama")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserAddressModel {
+public class ReportAddressModel {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,8 +30,8 @@ public class UserAddressModel {
     private String neighborhood;
     private String city;
 
-    @OneToOne(mappedBy = "address")
+    @OneToOne(mappedBy = "address", cascade = CascadeType.ALL)
     @JsonBackReference
-    private UserModel userModel;
+    private ReportModel reports;
 
 }

@@ -1,7 +1,6 @@
 package com.example.demo.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,9 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +31,7 @@ public class UserModel {
     private String name;
     private String email;
     private String password;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="address_id", referencedColumnName = "addressId")
     @JsonManagedReference

@@ -11,14 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.models.FirefighterModel;
 import com.example.demo.services.FirefighterService;
 import com.example.demo.services.UserService;
-
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/api/firefighters/")
+@RequestMapping("/api/firefighters")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class FirefighterController {
 
     @Autowired
@@ -28,30 +30,31 @@ public class FirefighterController {
     private FirefighterService firefighterService;
 
     @GetMapping
-    public List<FirefighterModel> getAllFirefighters(){
+    public List<FirefighterModel> getAllFirefighters() {
         return firefighterService.getAllFirefighters();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FirefighterModel> getFirefighterById(@PathVariable Long id){
-        try{
+    public ResponseEntity<FirefighterModel> getFirefighterById(@PathVariable Long id) {
+        try {
             Optional<FirefighterModel> newFirefighterModel = firefighterService.getFirefighterById(id);
-            if(newFirefighterModel.isPresent()){
+            if (newFirefighterModel.isPresent()) {
                 return ResponseEntity.ok(newFirefighterModel.get());
-            }else{
+            } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @PostMapping("/create")
-    public FirefighterModel createFirefighter(@RequestBody FirefighterModel firefighter) {
+    public ResponseEntity<FirefighterModel> createFirefighter(@RequestBody FirefighterModel firefighter) {
         try {
-            return (FirefighterModel) userService.creteNewUser(firefighter);
+            FirefighterModel createdFirefighter = (FirefighterModel) userService.creteNewUser(firefighter);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdFirefighter);
         } catch (Exception e) {
-            return null;
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
